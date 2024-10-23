@@ -1,0 +1,119 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organizador {
+  id         String                 @id @default(uuid())
+  nome       String
+  email      String
+  senha      String
+  createdAt  DateTime               @default(now())
+  updatedAt  DateTime               @updatedAt
+  googleId   String?
+  role       Role
+  atividades AtividadeOrganizador[]
+  eventos    EventoOrganizador[]
+
+  @@map("organizadores")
+}
+
+model Evento {
+  id            String              @id @default(uuid())
+  horario       String
+  local         String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  nome          String
+  dataFim       String
+  dataInicio    String
+  descricao     String
+  atividades    Atividade[]
+  organizadores EventoOrganizador[]
+
+  @@map("eventos")
+}
+
+model Atividade {
+  id            String                 @id @default(uuid())
+  local         String
+  horario       String
+  descricao     String
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  nome          String
+  vagas         Int
+  ch            Int
+  concomitante  Boolean
+  evento_id     String
+  organizadores AtividadeOrganizador[]
+  evento        Evento                 @relation(fields: [evento_id], references: [id])
+  inscricoes    Inscricao[]
+
+  @@map("atividades")
+}
+
+model Participante {
+  id         String      @id @default(uuid())
+  nome       String
+  email      String
+  senha      String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  idade      Int
+  sexo       Sexo
+  inscricoes Inscricao[]
+
+  @@map("participantes")
+}
+
+model Inscricao {
+  id              String       @id @default(uuid())
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  atividade_id    String
+  participante_id String
+  atividade       Atividade    @relation(fields: [atividade_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  participante    Participante @relation(fields: [participante_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("inscricoes")
+}
+
+model EventoOrganizador {
+  organizador_id String
+  evento_id      String
+  id             String      @id @default(uuid())
+  evento         Evento      @relation(fields: [evento_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  organizador    Organizador @relation(fields: [organizador_id], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@map("evento_organizador")
+}
+
+model AtividadeOrganizador {
+  id             String      @id @default(uuid())
+  organizador_id String
+  atividade_id   String
+  atividade      Atividade   @relation(fields: [atividade_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  organizador    Organizador @relation(fields: [organizador_id], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@map("atividade_organizadores")
+}
+
+enum Sexo {
+  M
+  F
+}
+
+enum Role {
+  SUPER_ADMIN
+  ACTIVITIES_ADMIN
+}

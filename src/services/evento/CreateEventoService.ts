@@ -6,12 +6,14 @@ interface CreateEventoRequest {
     dataFim: string;
     horario: string;
     local: string;
+    banner: string;
     descricao:string;
     organizador_id: string;
 }
 
 class CreateEventoService {
-    async execute({ nome, descricao,  dataInicio, dataFim, horario, local, organizador_id }: CreateEventoRequest) {
+    async execute({ nome, descricao,  dataInicio, dataFim, horario, local, banner, organizador_id }: CreateEventoRequest) {
+
       
         
         try {
@@ -32,6 +34,7 @@ class CreateEventoService {
                         dataFim,
                         horario,
                         local,
+                        banner,
                     },
                 });
 
@@ -42,6 +45,7 @@ class CreateEventoService {
                         organizador_id: organizador_id,
                     },
                 });
+
 
 
                 return { message: "evento criado com sucesso" };

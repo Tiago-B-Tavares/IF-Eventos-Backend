@@ -3,15 +3,26 @@ import { CreateInscricaoService } from "../../services/inscricoes/CreateInscrica
 
 class CreateInscricoesController {
     async handle(req: Request, res: Response) {
-        const { atividade_id, participante_id} = req.body;
+        const { atividade_id, participante_id } = req.body;
 
         const createInscricaoService = new CreateInscricaoService();
 
-        const inscrever = await createInscricaoService.execute({
-            atividade_id,
-            participante_id
-        })
-        return res.json(inscrever);
+        try {
+            const inscrever = await createInscricaoService.execute({
+                atividade_id,
+                participante_id,
+            });
+
+            return res.status(201).json(inscrever);
+        } catch (error) {
+            console.error("Erro ao criar inscrição:", error.message);
+
+            return res.status(400).json({
+                error: "Erro ao criar inscrição.",
+                message: error.message,
+            });
+        }
     }
 }
-export { CreateInscricoesController }
+
+export { CreateInscricoesController };

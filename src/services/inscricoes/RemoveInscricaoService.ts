@@ -8,6 +8,7 @@ interface RemoveInscricaoRequest {
 class RemoveInscricaoService {
     async execute({ atividade_id, participante_id }: RemoveInscricaoRequest) {
         try {
+         
           
             const removeInscricao = await prismaClient.inscricao.deleteMany({
                 where: {
@@ -17,6 +18,15 @@ class RemoveInscricaoService {
                     ]
                 }
             });
+
+            const removeChekInOut = await prismaClient.checkIn.deleteMany({
+                where: {
+                    AND: [
+                        { atividade_id: atividade_id },
+                        { participante_id: participante_id }
+                    ]
+                }
+            })
 
             if (removeInscricao.count === 0) {
                 return "Nenhuma inscrição encontrada para remover.";

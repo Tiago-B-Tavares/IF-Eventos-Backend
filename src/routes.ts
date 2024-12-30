@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import multer from 'multer';
-import path from 'path';  // Adicionei a importação de 'path'
+import path from 'path';  
 
 import { CreateWebUserController } from './controllers/webUser/CreateWebUserController';
 import { AuthWebUserController } from './controllers/webUser/AuthWebUserController';
@@ -12,6 +12,7 @@ import { GetUserDataByIdController } from './controllers/webUser/GetUserDataById
 
 import { CreateAppUserController } from './controllers/appUser/CreateAppUserController';
 import { UpdateAppUserController } from './controllers/appUser/UpdateAppUserController';
+import { CheckinUserController } from './controllers/appUser/CheckInUserController';
 
 import { CreateEventoController } from './controllers/evento/CreateEventoController';
 import { UpdateEventoController } from './controllers/evento/UpdateEventoController';
@@ -26,6 +27,7 @@ import { ListAllEventosController } from './controllers/evento/ListAllEventosCon
 import { CreateAtividadeController } from './controllers/atividades/CreateAtividadeController';
 import { DeleteAtividadeController } from './controllers/atividades/DeleteAtividadeController';
 import { ListAtividadesByEventIdController } from './controllers/atividades/ListAtividadesByEventIdController';
+import { ListAtividadesController } from './controllers/atividades/ListAtividadesController';
 import { UpdateAtividadeController } from './controllers/atividades/UpdateAtividadeController';
 import { VerificaAtividadesOrganizadorController } from './controllers/atividades/VerificaAtividadesOrganizadorController';
 
@@ -37,20 +39,22 @@ import { CreateInscricoesController } from './controllers/inscricoes/CreateInscr
 import { RemoveInscricaoController } from './controllers/inscricoes/RemoveInscricaoController';
 import { ShowInscritosByAtividadeController } from './controllers/inscricoes/ShowInscritosByAtividadeController';
 
-import { ChangeUserPermissionsController } from './controllers/admin/changeUserPermissionsController';
+
+
+import { ChangeUserPermissionsController } from './controllers/admin/ChangeUserPermissionsController';
+
 
 import uploadConfig from './config/multer';
 
 import { logRequestData } from './middlewares/logRequestData';
-
-
+import { CheckOutUserController } from './controllers/appUser/CheckOutUserController';
 
 
 
 const router = Router();
 
-// Upload de imagem
-const upload = multer(uploadConfig.upload('public/uploads'));
+
+const upload = multer(uploadConfig.upload('./tmp'));
 
 
 router.put('/permissions', new ChangeUserPermissionsController().handle);
@@ -68,10 +72,13 @@ router.put('/user', new UpdateWebUserController().handle);
 // App User
 router.get('/app/user', new GetAppUsersController().handle);
 router.post('/app/user', new CreateAppUserController().handle);
+router.post('/app/user/checkin',logRequestData, new CheckinUserController().handle);
+router.post('/app/user/checkOut',logRequestData, new CheckOutUserController().handle);
 router.put('/app/user', new UpdateAppUserController().handle);
 
+
 // Evento
-router.post('/eventos', new CreateEventoController().handle);
+router.post('/eventos',new CreateEventoController().handle);
 router.get('/count-eventos', new CountEventosController().handle);
 router.get('/eventos', new ListEventoController().handle);
 router.get('/todos-eventos', new ListAllEventosController().handle);
@@ -83,6 +90,7 @@ router.post('/add-organizador-evento', new AddOrganizadorEventoController().hand
 router.post('/atividades', new CreateAtividadeController().handle);
 router.delete('/atividades', new DeleteAtividadeController().handle);
 router.get('/evento/atividades', new ListAtividadesByEventIdController().handle); 
+router.get('/atividades', new ListAtividadesController().handle); 
 router.put('/atividades', new UpdateAtividadeController().handle);
 router.get('/hasAtividades', new VerificaAtividadesOrganizadorController().handle)
 
@@ -95,6 +103,10 @@ router.put('/colaborador', new UpdateColaboradorController().handle);
 router.post('/inscrever', new CreateInscricoesController().handle);
 router.delete('/inscrever', new RemoveInscricaoController().handle);
 router.get('/inscricoes', new ShowInscritosByAtividadeController().handle);
+router.get('/myInscriptions', new ShowInscritosByAtividadeController().handle);
+
+
+
 
 
 router.use('/files', express.static(path.join(__dirname, '..', 'public/uploads')));  

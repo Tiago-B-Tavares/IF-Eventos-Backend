@@ -15,6 +15,7 @@ class ListAllEventosService {
                     dataInicio: true,
                     dataFim: true,
                     local: true,
+                    banner: true,
                     _count: true,
                     organizadores: {
                         select: {

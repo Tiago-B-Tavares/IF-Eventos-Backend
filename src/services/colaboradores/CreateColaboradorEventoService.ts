@@ -7,7 +7,7 @@ interface CreateColaboradorRequest {
 
 class CreateColaboradorEventoService {
     async execute({ organizador_id, evento_id }: CreateColaboradorRequest) {
-        console.log(organizador_id, evento_id );
+
         
         try {
             // Verifica se o organizador existe

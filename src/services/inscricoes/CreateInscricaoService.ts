@@ -1,75 +1,54 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
-interface inscricaoRequest {
+interface CreateInscricaoRequest {
     atividade_id: string;
     participante_id: string;
 }
 
 class CreateInscricaoService {
-    async execute({ atividade_id, participante_id }: inscricaoRequest) {
-       
-
+    async execute({ atividade_id, participante_id }: CreateInscricaoRequest) {
         try {
-            // Verifica se o participante já está inscrito
-            const participanteAlreadyExists = await prismaClient.inscricao.findFirst({
-                where: {
-                    participante_id: participante_id
-                }
+            const existeInscricao = await prismaClient.inscricao.findFirst({
+                where: { atividade_id, participante_id },
             });
 
-            // Verifica se a atividade existe
-            let checkAtividade = await prismaClient.atividade.findFirst({
-                where: {
-                    id: atividade_id
-                }
+            if (existeInscricao) {
+                throw new AppError("Você já está inscrito nesta atividade.", 400);
+            }
+
+            const atividade = await prismaClient.atividade.findUnique({
+                where: { id: atividade_id },
             });
 
-            if (!checkAtividade) {
-                throw new Error("Atividade não encontrada");
+            if (!atividade) {
+                throw new AppError("Atividade não encontrada.", 404);
             }
 
-            if (participanteAlreadyExists) {
-                throw new Error("Usuário já está participando");
-
-            } else if (checkAtividade.vagas > 0) {
-
-               
-                    // Cria a inscrição
-                    const inscricao = await prismaClient.inscricao.create({
-                        data: {
-                            atividade_id: atividade_id,
-                            participante_id: participante_id
-                        },
-                        select: {
-                            id: true,
-                            atividade_id: true,
-                            participante_id: true,
-                            createdAt: true,
-                            updatedAt: true
-                        }
-                    });
-
-                    // Atualiza o número de vagas
-                    await prismaClient.atividade.update({
-                        where: {
-                            id: atividade_id
-                        },
-                        data: {
-                            vagas: {
-                                decrement: 1
-                            }
-                        }
-                    });
-
-
-                    return inscricao;
-
-            } else {
-                throw new Error("Não há vagas para esta atividade: ");
+            if (atividade.vagas <= 0) {
+                throw new AppError("Atividade sem vagas disponíveis.", 400);
             }
 
+            const inscricao = await prismaClient.inscricao.create({
+                data: {
+                    atividade_id,
+                    participante_id,
+                },
+            });
+
+            await prismaClient.atividade.update({
+                where: { id: atividade_id },
+                data: { vagas: { decrement: 1 } },
+            });
+
+            return inscricao;
         } catch (error) {
-            return { message: `${error}` };
+            if (error instanceof AppError) {
+                throw error;
+            }
+
+            console.error("Erro interno ao criar inscrição:", error);
+            throw new AppError("Erro interno no servidor.", 500);
         }
     }
 }

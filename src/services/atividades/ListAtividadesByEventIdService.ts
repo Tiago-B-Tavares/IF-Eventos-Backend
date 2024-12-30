@@ -3,9 +3,10 @@ import prismaClient from "../../prisma";
 interface AtividadeRequest {
   evento_id: string;
 }
-class SearchAllAtividadesService {
+class ListAtividadesByEventIdService {
   async execute({ evento_id }: AtividadeRequest) {
     try {
+
 
       const atividades = await prismaClient.atividade.findMany({
         where: {
@@ -19,9 +20,22 @@ class SearchAllAtividadesService {
           concomitante: true,
           vagas: true,
           ch: true,
-         
-
-          
+          organizadores: {
+            select: {
+              organizador: {
+                select: {
+                  nome: true,
+                }
+              }
+            }
+          },
+          inscricoes: {
+            select: {
+              id: true,
+              participante_id: true,
+             atividade_id: true
+            }
+          }
         },
 
       });
@@ -40,4 +54,4 @@ class SearchAllAtividadesService {
   }
 }
 
-export { SearchAllAtividadesService };
+export { ListAtividadesByEventIdService };

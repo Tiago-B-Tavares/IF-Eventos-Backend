@@ -3,14 +3,17 @@ import prismaClient from '../../prisma'
 import { Sex } from '../../enums/participantSex'
 
 interface AppUserRequest {
+    id?:string
     nome: string;
     email: string;
     senha: string
-    sexo:Sex;
-    idade:number;
+    sexo?:'M';
+    idade?:12;
 }
 class CreateAppUserService {
-    async execute({ nome, email, senha, sexo, idade }: AppUserRequest) {
+    async execute({ id, nome, email, senha, sexo , idade }: AppUserRequest) {
+       console.log('chegou aqui: ', id, nome, email, senha, sexo , idade);
+       
         try {
             if (!email) {
                 throw new Error("Email incorreto!");
@@ -21,13 +24,17 @@ class CreateAppUserService {
                 }
             })
             if (userAlreadyExists) {
+               
+                
                 throw new Error("Email já existe!");
+                
             }
 
             const senhaHash = await hash(senha, 8)
 
             const user = await prismaClient.participante.create({
                 data: {
+                    id: id,
                     nome: nome,
                     email: email,
                     senha: senhaHash,

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "eventos" ALTER COLUMN "banner" DROP NOT NULL,
+ALTER COLUMN "banner" DROP DEFAULT;

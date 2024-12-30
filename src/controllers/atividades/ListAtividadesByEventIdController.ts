@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import { SearchAllAtividadesService } from "../../services/atividades/ListAtividadesByEventIdService";
+import { ListAtividadesByEventIdService } from "../../services/atividades/ListAtividadesByEventIdService";
+
 
 
 class ListAtividadesByEventIdController {
 
     async handle( req: Request, res: Response) {
 
-        const evento_id =  req.query.evento_id as string;
 
-        const allAtividades = new SearchAllAtividadesService() 
+        const evento_id =  req.query.eventoId as string;
+
+        const allAtividades = new ListAtividadesByEventIdService() 
 
         const atividades = await allAtividades.execute({evento_id})
 

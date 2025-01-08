@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 
@@ -7,7 +8,7 @@ class GetDataUserService {
             const userData = await prismaClient.organizador.findMany()
             return userData
         } catch (error) {
-            throw new Error("Erro ao buscar dados do usuário");
+            throw new AppError("Erro ao buscar dados do usuário",  500);
         }
     }
 }

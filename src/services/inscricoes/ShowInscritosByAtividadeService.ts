@@ -1,3 +1,5 @@
+import e from "express";
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface showInscritosRequest {
@@ -30,7 +32,7 @@ class ShowInscritosByAtividadeService {
                 },
             });
             if (!inscritosList) {
-                return "Não há inscritos nessa atividade!"
+                throw new AppError(' Nehuma inscrição encontrada',404);
             } else {
                 return inscritosList;
                     
@@ -38,8 +40,8 @@ class ShowInscritosByAtividadeService {
 
 
         } catch (error) {
-            console.log(error);
-            return `erro ao listar inscritos: ${error}`
+          
+            throw new AppError("Nehuma inscrição encontrada para remover", error);
            
             
         }

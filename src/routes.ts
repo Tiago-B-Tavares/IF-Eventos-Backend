@@ -20,6 +20,7 @@ import { DeleteEventoController } from './controllers/evento/DeleteEventoControl
 import { CountEventosController } from './controllers/evento/CountEventoController';
 import { AddOrganizadorEventoController } from './controllers/evento/AddOrganizadorEventoController';
 import { ListEventoController } from './controllers/evento/ListEventoController';
+import { GetEventStatisticsController } from './controllers/evento/GetEventStatisticsController ';
 
 import { GetAppUsersController } from './controllers/appUser/GetAppUsersController';
 import { ListAllEventosController } from './controllers/evento/ListAllEventosController';
@@ -82,9 +83,9 @@ router.post('/eventos',new CreateEventoController().handle);
 router.get('/count-eventos', new CountEventosController().handle);
 router.get('/eventos', new ListEventoController().handle);
 router.get('/todos-eventos', new ListAllEventosController().handle);
-router.put('/evento', new UpdateEventoController().handle);
+router.get('/eventos/estatisticas', new GetEventStatisticsController().handle);
 router.delete('/evento', new DeleteEventoController().handle);
-router.post('/add-organizador-evento', new AddOrganizadorEventoController().handle);
+
 
 // Atividades
 router.post('/atividades', new CreateAtividadeController().handle);
@@ -104,9 +105,6 @@ router.post('/inscrever', new CreateInscricoesController().handle);
 router.delete('/inscrever', new RemoveInscricaoController().handle);
 router.get('/inscricoes', new ShowInscritosByAtividadeController().handle);
 router.get('/myInscriptions', new ShowInscritosByAtividadeController().handle);
-
-
-
 
 
 router.use('/files', express.static(path.join(__dirname, '..', 'public/uploads')));  

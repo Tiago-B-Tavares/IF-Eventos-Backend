@@ -4,9 +4,9 @@ import { hash } from 'bcryptjs';
 interface updateAppUserRequest{ 
     nome:string;
     email: string;
-    senha: string;
-    sexo: string;
-    idade:number;
+    senha?: string;
+    sexo?: string;
+    idade?:number;
 }
 
 class UpdateAppUserService{

@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 import { compare } from "bcryptjs";
 
@@ -8,6 +9,8 @@ interface AuthRequest {
 
 class AuthWebUserService {
   async execute({ email, senha }: AuthRequest) {
+    console.log(email, senha);
+    
     try {
       const user = await prismaClient.organizador.findFirst({
         where: {
@@ -16,13 +19,13 @@ class AuthWebUserService {
       });
 
       if (!user) {
-        throw new Error("Email ou senha incorretos!");
+        throw new AppError("Email ou senha incorretos!", 401);
       }
 
       const senhaMatch = await compare(senha, user.senha);
 
       if (!senhaMatch) {
-        throw new Error("Email ou senha incorretos!");
+        throw new AppError("Email ou senha incorretos!", 401);
       }
 
       return {
@@ -31,10 +34,7 @@ class AuthWebUserService {
         email: user.email,
       };
     } catch (error) {
-      console.error("Erro no processo de autenticação:", error);
-      throw new Error(
-        `Não foi possível logar usuário devido ao erro: ${error.message}`
-      );
+      throw new AppError("Erro ao autenticar o usuário!", 500);
     }
   }
 }

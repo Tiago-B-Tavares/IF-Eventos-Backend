@@ -1,10 +1,12 @@
+import { $Enums } from "@prisma/client";
 import prismaClient from "../../prisma";
 
 interface UpdateAtividadeRequest {
     id: string;
     local: string;
-    horario: string;
+    horario: Date;
     ch: number;
+    tipo: $Enums.TipoAtividade
     concomitante: boolean;
     nome: string;
     descricao: string;
@@ -12,9 +14,11 @@ interface UpdateAtividadeRequest {
 }
 
 class UpdateAtividadesService {
-    async execute({ id, local, horario, ch, concomitante, nome, descricao, vagas }: UpdateAtividadeRequest) {
-   
+    async execute({ id, local, horario, ch, tipo, concomitante, nome, descricao, vagas }: UpdateAtividadeRequest) {
 
+
+      
+        
         try {
             const atividade = await prismaClient.atividade.update({
                 where: {
@@ -24,6 +28,7 @@ class UpdateAtividadesService {
                     local,
                     horario,
                     ch,
+                    tipo,
                     concomitante,
                     nome,
                     descricao,
@@ -32,13 +37,13 @@ class UpdateAtividadesService {
             });
 
 
-            
+
             return { message: "Atividade atualizada com sucesso!", atividade };
 
         } catch (error: any) {
             console.error("Erro ao atualizar a atividade:", error);
 
-           
+
             return { message: `Erro ao atualizar atividade: ${error.message}` };
         }
     }

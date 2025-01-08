@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface ListEventosRequest {
@@ -46,6 +47,7 @@ class ListEventoService {
                             descricao: true,
                             vagas: true,
                             ch: true,
+                            tipo: true,
                             inscricoes: {
                                 select: {
                                     participante: {
@@ -75,7 +77,7 @@ class ListEventoService {
 
             return listEventos;
         } catch (error) {
-            return { message: `Não foi possível listar os Eventos devido ao erro: ${error}` };
+            throw new  AppError(`Não foi possível listar os Eventos devido ao erro:`, error )
         }
     }
 }

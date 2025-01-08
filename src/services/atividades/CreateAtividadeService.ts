@@ -2,6 +2,7 @@ import { AppError } from '../../ErrorControl/AppError';
 import prismaClient from '../../prisma';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 import QRCode from 'qrcode';
+import { $Enums } from '@prisma/client';
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
@@ -15,6 +16,7 @@ interface AtividadeRequest {
     local: string;
     horario: Date;
     vagas: number;
+    tipo: $Enums.TipoAtividade;
     ch: number;
     data: string;
     concomitante: boolean;
@@ -31,11 +33,14 @@ class CreateAtividadeService {
         horario,
         vagas,
         ch,
+        tipo,
         data,
         concomitante,
         evento_id,
         organizador_id,
     }: AtividadeRequest) {
+
+
         try {
             // Valida se o organizador existe
             await this.validateOrganizador(organizador_id);
@@ -51,6 +56,7 @@ class CreateAtividadeService {
                 horario,
                 vagas,
                 ch,
+                tipo,
                 data,
                 concomitante,
                 evento_id,
@@ -62,8 +68,6 @@ class CreateAtividadeService {
             // Gera e faz o upload do QR Code
             const qrCodeUrl = await this.generateAndUploadQRCode({
                 atividade_id: atividade.id
-                
-                
             });
 
             // Atualiza o registro da atividade com o link do QR Code
@@ -106,6 +110,7 @@ class CreateAtividadeService {
         horario,
         vagas,
         ch,
+        tipo,
         data,
         concomitante,
         evento_id,
@@ -119,6 +124,7 @@ class CreateAtividadeService {
                 data,
                 vagas: Number(vagas),
                 ch: Number(ch),
+                tipo,
                 concomitante,
                 evento: {
                     connect: { id: evento_id },
@@ -144,15 +150,15 @@ class CreateAtividadeService {
     // Gera e faz upload do QR Code
     private async generateAndUploadQRCode({
         atividade_id
-    
+
     }: {
         atividade_id: string;
-        
+
     }) {
         // Dados incluídos no QR Code
         const qrCodeData = JSON.stringify({
             atividade_id,
-       
+
         });
 
         const qrCodeDataUrl = await QRCode.toDataURL(qrCodeData);
@@ -180,5 +186,4 @@ class CreateAtividadeService {
         });
     }
 }
-
 export { CreateAtividadeService };

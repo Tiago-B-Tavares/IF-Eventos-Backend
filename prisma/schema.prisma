@@ -49,9 +49,10 @@ model Atividade {
   updatedAt     DateTime               @updatedAt
   nome          String
   vagas         Int
-  data          DateTime               @default(now())
+  data          String               
   qr_code_link  String                 @default("")
   ch            Int
+  tipo          TipoAtividade
   concomitante  Boolean
   evento_id     String
   evento        Evento                 @relation(fields: [evento_id], references: [id])
@@ -64,12 +65,12 @@ model Atividade {
 }
 
 model Participante {
-  id         String       @id @default(uuid())
+  id         String      @id @default(uuid())
   nome       String
   email      String
   senha      String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   idade      Int
   sexo       Sexo
   inscricoes Inscricao[]
@@ -117,20 +118,18 @@ model AtividadeOrganizador {
   @@map("atividade_organizadores")
 }
 
-
-
 model CheckIn {
-  id                String       @id @default(uuid())
-  participante_id   String
-  atividade_id      String
-  inscricao_id      String
-  checkInTime       DateTime?
-  checkInValidated  Boolean      @default(false)
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-  inscricao         Inscricao    @relation(fields: [inscricao_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  atividade         Atividade    @relation(fields: [atividade_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  participante      Participante @relation(fields: [participante_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id               String       @id @default(uuid())
+  participante_id  String
+  atividade_id     String
+  inscricao_id     String
+  checkInTime      DateTime?
+  checkInValidated Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  inscricao        Inscricao    @relation(fields: [inscricao_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  atividade        Atividade    @relation(fields: [atividade_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  participante     Participante @relation(fields: [participante_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("check_in")
 }
@@ -159,4 +158,16 @@ enum Sexo {
 enum Role {
   SUPER_ADMIN
   ACTIVITIES_ADMIN
+}
+
+enum TipoAtividade {
+  Oficina
+  Apresentacao
+  Palestra
+  Workshop
+  Minicurso
+  Seminario
+  Mesa_Redonda
+  Roda_De_Conversa
+  Outro
 }

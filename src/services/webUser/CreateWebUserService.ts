@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs';
 import prismaClient from '../../prisma';
 import { Role } from '../../enums/permissionRoles'; 
+import { AppError } from '../../ErrorControl/AppError';
 
 interface WebUserRequest {
   nome: string;
@@ -16,7 +17,7 @@ class CreateWebUserService {
     
     try {
       if (!email) {
-        throw new Error("Email vazio!");
+        throw new AppError("Email o campo email não pode estar vazio", 400);
       }
 
       // Verifica se o usuário já existe
@@ -25,7 +26,7 @@ class CreateWebUserService {
       });
 
       if (userAlreadyExists) {
-        throw new Error("Email já existe!");
+        throw new AppError("Email ja cadastrado", 400);
       }
 
       // Hash da senha apenas se fornecida
@@ -50,8 +51,7 @@ class CreateWebUserService {
 
       return user;
     } catch (error) {
-      console.error("Erro no processo de autenticação:", error);
-      throw new Error(error.message);
+      throw new AppError("Erro ao criar o usuário",  500);
     }
   }
 }

@@ -1,16 +1,17 @@
-import prismaClient from "../../prisma";
 
+import { AppError } from "../../ErrorControl/AppError";
+import prismaClient from "../../prisma";
 
 
 class ListAllEventosService {
     async execute() {
         try {
             const listEventos = await prismaClient.evento.findMany({
-               
+
                 select: {
                     id: true,
                     nome: true,
-                    descricao:true,
+                    descricao: true,
                     horario: true,
                     dataInicio: true,
                     dataFim: true,
@@ -33,41 +34,40 @@ class ListAllEventosService {
                             local: true,
                             horario: true,
                             concomitante: true,
-                            descricao:true,
+                            descricao: true,
                             vagas: true,
+                            tipo: true,
                             ch: true,
+                            qr_code_link: true,
                             inscricoes: {
                                 select: {
-                                  participante: {
-                                    select: {
-                                      nome: true
-                                    }
-                                  }
-                                }
-                              },
-                            organizadores:{
-                                select:{
-                                    organizador:{
-                                        select:{
-                                            nome:true,
+                                    participante: {
+                                        select: {
+                                            nome: true,
+                                            email: true,
+                                         
                                         }
                                     }
                                 }
-                            }  
-                                   
-                               
+                            },                        
+                            organizadores: {
+                                select: {
+                                    organizador: {
+                                        select: {
+                                            nome: true,
+                                        }
+                                    }
+                                }
+                            }
                         },
                     }
 
                 }
             });
 
-
-
-
             return listEventos;
         } catch (error) {
-            return { message: `Não foi possível listar os Eventos devido ao erro: ${error}` };
+          throw new  AppError(`Não foi possível listar os Eventos devido ao erro:`, error )
         }
     }
 }

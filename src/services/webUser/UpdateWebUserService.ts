@@ -1,5 +1,6 @@
 import { hash } from 'bcryptjs';
 import prismaClient from '../../prisma'
+import { AppError } from '../../ErrorControl/AppError';
 
 interface UpdateWebUserRequest {
     id: string;
@@ -25,7 +26,7 @@ class UpdateWebUserService {
                 }
             })
         } catch (error) {
-            return { message: `Não foi possível atualizar ados do usuário devido ao erro: ${error} ` }
+            throw new AppError("Nao foi possivel atualizar o usuario", 500);
         }
     }
 }

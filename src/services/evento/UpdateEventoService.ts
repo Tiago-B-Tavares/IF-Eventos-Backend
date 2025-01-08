@@ -1,4 +1,5 @@
 
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface UpdateEventoRequest {
@@ -31,8 +32,8 @@ class UpdateEventoService {
             })
             return { message: "alterado com susesso!" }
         } catch (error) {
-            console.error(error);
-            return { message: "Erro ao deletar", error };
+            throw new  AppError(`Não foi possível remover este evento`, error )
+        
         }
         
     }

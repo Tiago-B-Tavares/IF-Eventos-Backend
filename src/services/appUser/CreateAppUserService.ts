@@ -12,7 +12,7 @@ interface AppUserRequest {
 }
 class CreateAppUserService {
     async execute({ id, nome, email, senha, sexo , idade }: AppUserRequest) {
-       console.log('chegou aqui: ', id, nome, email, senha, sexo , idade);
+   
        
         try {
             if (!email) {

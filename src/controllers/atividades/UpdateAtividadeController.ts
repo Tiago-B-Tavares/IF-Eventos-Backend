@@ -4,24 +4,29 @@ import { UpdateAtividadesService } from "../../services/atividades/UpdateAtivida
 class UpdateAtividadeController {
     async handle(req: Request, res: Response) {
         const id = req.query.id as string;
-        const { nome, descricao, local, horario, vagas, ch, concomitante } = req.body;
-       
+        const { nome, descricao, local, horario, vagas, ch, tipo, concomitante } = req.body;
 
+
+        const horarioFormatado = new Date(); 
+        horarioFormatado.setHours(Number(horario.slice(0, 2))-3); 
+        horarioFormatado.setMinutes(Number(horario.slice(-2))) 
+           
+         
         const updateAtividadesService = new UpdateAtividadesService();
 
         try {
             Number(ch)
             const atividade = await updateAtividadesService.execute({
-                id, local, horario, ch, concomitante, nome, descricao, vagas
+                id, local, horario:horarioFormatado, ch, tipo, concomitante, nome, descricao, vagas
             });
 
-            // Retorna a resposta bem-sucedida
+          
             return res.json(atividade);
 
         } catch (error: any) {
             console.error("Erro ao atualizar a atividade:", error);
 
-            // Retorna um erro 500 se algo deu errado durante a atualização
+           
             return res.status(500).json({ message: `Erro ao atualizar a atividade: ${error.message}` });
         }
     }

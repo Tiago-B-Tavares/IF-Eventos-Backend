@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { CreateAtividadeService } from '../../services/atividades/CreateAtividadeService';
+import { $Enums } from '@prisma/client';
 
 class CreateAtividadeController {
     async handle(req: Request, res: Response) {
         try {
 
-            const {
+            let {
                 nome,
                 descricao,
                 local,
@@ -13,9 +14,13 @@ class CreateAtividadeController {
                 data,
                 vagas,
                 ch,
+                tipo,
                 concomitante,
                 organizador_id
             } = req.body;
+            if (tipo !== $Enums.TipoAtividade) {
+                tipo = $Enums.TipoAtividade.Oficina;
+            }
 
 
             const evento_id = req.query.id as string;
@@ -23,12 +28,12 @@ class CreateAtividadeController {
             const createAtividadeService = new CreateAtividadeService();
             let activityTime: Date | undefined;
             if (horario) {
-                const [hours, minutes] = horario.split(':'); // Divide a hora e minutos
+                const [hours, minutes] = horario.split(':');
                 const currentDate = new Date();
-                currentDate.setHours(Number(hours)-3, Number(minutes), 0, 0); // Define a hora, minutos, segundos e milissegundos
+                currentDate.setHours(Number(hours) - 3, Number(minutes), 0, 0);
                 activityTime = currentDate;
             }
-console.log(activityTime);
+
 
 
 
@@ -39,6 +44,7 @@ console.log(activityTime);
                 horario: activityTime,
                 vagas: Number(vagas),
                 ch: Number(ch),
+                tipo: tipo as $Enums.TipoAtividade,
                 concomitante: !!concomitante,
                 data,
                 evento_id,
@@ -46,10 +52,10 @@ console.log(activityTime);
 
             });
 
-           
+
             return res.json(atividade);
         } catch (error) {
-           
+
             return res.status(400).json({ error: error.message });
         }
     }

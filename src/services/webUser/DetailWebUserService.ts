@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 class DetailWebUSerService {
@@ -16,7 +17,7 @@ class DetailWebUSerService {
 
             return user;
         } catch (error) {
-            throw new Error( `Não foi possível buscar dados do usuário devido ao erro: ${error} `)
+            throw new AppError("Erro ao buscar o usuário",  500);
         }
     }
 }

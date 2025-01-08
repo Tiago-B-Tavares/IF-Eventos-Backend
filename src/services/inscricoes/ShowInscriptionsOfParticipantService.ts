@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface showInscritosRequest {
@@ -35,10 +36,7 @@ class ShowInscriptionsOfParticipantService {
 
 
         } catch (error) {
-            console.log(error);
-            return `erro ao listar inscritos: ${error}`
-
-
+            throw new AppError("Ocorreu um erro ao buscar as inscrições", 404);
         }
     }
 }

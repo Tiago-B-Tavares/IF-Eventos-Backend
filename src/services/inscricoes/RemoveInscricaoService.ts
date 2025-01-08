@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface RemoveInscricaoRequest {
@@ -8,8 +9,8 @@ interface RemoveInscricaoRequest {
 class RemoveInscricaoService {
     async execute({ atividade_id, participante_id }: RemoveInscricaoRequest) {
         try {
-         
-          
+
+
             const removeInscricao = await prismaClient.inscricao.deleteMany({
                 where: {
                     AND: [
@@ -29,11 +30,12 @@ class RemoveInscricaoService {
             })
 
             if (removeInscricao.count === 0) {
-                return "Nenhuma inscrição encontrada para remover.";
+                throw new AppError("Nehuma inscrição encontrada para remover", 404);
+
             }
 
             try {
-                
+
                 await prismaClient.atividade.update({
                     where: {
                         id: atividade_id

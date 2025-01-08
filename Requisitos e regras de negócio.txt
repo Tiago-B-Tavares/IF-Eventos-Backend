@@ -16,9 +16,9 @@ Regras de negócio:
 
 [X] O sistema não deve permitir que seja cadastrado um usuário já existente.
 [X] O sistema deve possuir rotas privadas (Apenas acessíveis para usuários autenticados).
-[ ] O sistema deve permitir a limitação de vagas para cada evento.
-[ ] O participante não pode se inscrever em um evento com vagas encerradas.
-[ ] O sistema deve receber dados dos participante através do qrcode.
+[X] O sistema deve permitir a limitação de vagas para cada evento.
+[X] O participante não pode se inscrever em um evento com vagas encerradas.
+[X] O sistema deve receber dados dos participante através do qrcode.
 [ ] O sistema deve permitir a visualização dos dados através de gráficos.
 
 
@@ -32,17 +32,16 @@ Observaçôes:
 
 GEOLOCALIZAÇÃO:
 
-- Deixar o usuario web escolher o local e pegar latitude e longitude e salvar no banco
 - Pegar a localização do usuario app (latitude e longitude) 
 - Definir uma distancia mínima para validar a participação nas atividades
-- Monitorar a distancia entre o usuário do app e do local da atividade cadastrado
+- Calcular a distancia entre o usuário do app no check-in e do IFG
 
 QRCODE:
 
-- Usar api de geração do qrcode
-- O usuário web gera um qrcode com o link da rota de inscrição 
+
+- O usuário web gera um qrcode ao criar uma atividade 
 - O usuário web pode baixar o codigo gerado
-- O usuário app escaneia e abre a tela de se inscrever na atividade
+- O usuário app escaneia o QRCode para realizar o check-in e check-out
 
 
 
@@ -54,12 +53,12 @@ QRCODE:
 
 - qrcode representando assinatura dos diretores e organizadores(link para o suap)
 
-- Adicionar usuário administrador de todo evento
+- Adicionar usuário administrador de todo evento OK
 
-- permitir ao organiizador alterar dados de um participante
+- permitir ao organizador alterar dados de um participante OK
 
-- adicionar periodo do evento (data de inicio e fim )
+- adicionar periodo do evento (data de inicio e fim ) OK
 
-- Adicionar status de check-in e check-out 
+- Adicionar status de check-in e check-out OK
 
-- adicionar horario de check-in e check-out da atividade
+- adicionar horario de check-in e check-out da atividade OK

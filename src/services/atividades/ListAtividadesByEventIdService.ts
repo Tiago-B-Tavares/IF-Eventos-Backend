@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface AtividadeRequest {
@@ -48,7 +49,7 @@ class ListAtividadesByEventIdService {
 
     } catch (error) {
 
-      throw new Error("Ocorreu um erro ao buscar as atividades \n" + error);
+      throw new AppError("Ocorreu um erro ao buscar as atividades \n", error);
 
     }
   }

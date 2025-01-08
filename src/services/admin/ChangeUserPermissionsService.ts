@@ -3,7 +3,7 @@ import prismaClient from '../../prisma';
 class ChangeUserPermissionsService {
     async execute({ organizador_id, role }: { organizador_id: string, role: Role }) {
         try {
-console.log(organizador_id, role);
+
 
             const changeRole = await prismaClient.organizador.update({
                 where: {
@@ -18,7 +18,7 @@ console.log(organizador_id, role);
 
                 }
             })
-            console.log(changeRole);
+      
             
             return "Permissoes atualizadas!"
         } catch (error) {

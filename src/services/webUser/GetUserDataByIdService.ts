@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface GetUserDataByIdRequest {
@@ -23,9 +24,8 @@ class GetUserDataByIdService {
             })
             return {userData};
         } catch (error) {
-            console.error("Erro ao buscar dados do usuário! ", error)
-            throw new Error("Erro ao buscar dados do usuário!");
-
+           
+            throw new AppError("Erro ao buscar dados do usuário",  500);
         }
 
     }

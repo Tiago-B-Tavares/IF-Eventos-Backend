@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 
@@ -33,7 +34,7 @@ class UserAlreadyExistsService {
       }
 
     } catch (error: any) {
-      throw new Error(`Erro no banco de dados: ${error.message}`);
+      throw new AppError("Erro ao buscar o usuário",  500);
     }
   }
 }

@@ -43,7 +43,7 @@ class CheckInUserService {
             );
 
             if (conflito) {
-                throw new AppError("Você já está inscrito em uma atividade no mesmo horário. Por favor, cancele uma das inscrições", 400);
+                throw new AppError("Você já está inscrito em uma atividade no mesmo horário. Por favor, cancele uma das inscrições.", 400);
             }
 
             const agora = new Date();

@@ -4,46 +4,36 @@ class GetEventStatisticsService {
     async execute(eventoId: string) {
         console.log("service: ", eventoId);
         try {
-            // Busca os dados do evento e a contagem de atividades associadas
-            const eventStatistics = await prismaClient.evento.findFirst({
-                where: {
-                    id: eventoId, // Filtro para o evento específico
-                },
-                select: {
-                    nome: true, // Nome do evento
-                    atividades: {
-                        select: {
-                            id: true,
-                            nome: true, // Nome da atividade
-                            inscricoes: true, // Contagem de inscrições associadas a cada atividade
-                        },
-                    },
-                },
+            // Verifica se o evento existe
+            const eventExists = await prismaClient.evento.findUnique({
+                where: { id: eventoId },
+                select: { id: true, nome: true },
             });
 
-            if (!eventStatistics) {
+            if (!eventExists) {
                 throw new Error("Evento não encontrado.");
             }
 
-            // Analisa a distribuição de tipos de atividades
+            // Conta as atividades agrupadas por tipo, filtrando pelo eventoId
             const activityTypesDistribution = await prismaClient.atividade.groupBy({
-                by: ["tipo"],
+                by: ["tipo"], // Agrupar pelo campo "tipo"
+                where: {
+                    evento_id: eventoId, // Filtro para atividades do evento específico
+                },
                 _count: {
-                    _all: true,
+                    _all: true, // Contar o total de atividades em cada tipo
                 },
             });
 
-            if (activityTypesDistribution.length === 0) {
-                throw new Error("Nenhuma distribuição de tipo de atividade encontrada.");
-            }
-
+            // Mapeia os resultados para uma estrutura mais legível
             const activityTypeStats = activityTypesDistribution.map((type) => ({
                 tipo: type.tipo,
                 quantidade: type._count._all,
             }));
 
             return {
-                activityTypeStats
+                evento: eventExists.nome,
+                activityTypeStats,
             };
         } catch (error) {
             console.error("Erro ao obter estatísticas:", error);

@@ -25,6 +25,9 @@ class CreateWebUserService {
         where: { email }
       });
 
+      const IsFirstUser = await prismaClient.organizador.findMany();
+
+
       if (userAlreadyExists) {
         throw new AppError("Email ja cadastrado", 400);
       }
@@ -39,7 +42,7 @@ class CreateWebUserService {
           email,
           senha: senhaHash,
           googleId,
-          role:Role.ACTIVITIES_ADMIN
+          role: IsFirstUser.length === 0 ? Role.SUPER_ADMIN : Role.ACTIVITIES_ADMIN
         },
         select: {
           id: true,

@@ -5,6 +5,7 @@ class CreateInscricoesController {
     async handle(req: Request, res: Response) {
         const { atividade_id, participante_id } = req.body;
 
+
         const createInscricaoService = new CreateInscricaoService();
 
         try {

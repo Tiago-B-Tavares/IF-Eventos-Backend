@@ -20,6 +20,7 @@ class ShowInscriptionsOfParticipantService {
 
                     atividade: {
                         select: {
+                            data: true,
                             nome: true,
                             descricao:true,
                             local:true,
@@ -30,6 +31,8 @@ class ShowInscriptionsOfParticipantService {
                     },
                 },
             });
+
+
 
 
             return inscritosList;

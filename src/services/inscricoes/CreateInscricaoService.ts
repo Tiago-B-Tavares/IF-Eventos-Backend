@@ -17,6 +17,14 @@ class CreateInscricaoService {
                 throw new AppError("Você já está inscrito nesta atividade.", 400);
             }
 
+            const participante = await prismaClient.participante.findUnique({
+                where: { id: participante_id },
+            });
+
+            if (!participante) {
+                throw new AppError("Participante não encontrado.", 404);
+            }
+
             const atividade = await prismaClient.atividade.findUnique({
                 where: { id: atividade_id },
             });
@@ -31,8 +39,8 @@ class CreateInscricaoService {
 
             const inscricao = await prismaClient.inscricao.create({
                 data: {
-                    atividade_id,
-                    participante_id,
+                    atividade_id: atividade_id,
+                    participante_id: participante_id,
                 },
             });
 

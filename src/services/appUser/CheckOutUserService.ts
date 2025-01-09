@@ -1,4 +1,3 @@
-
 import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
@@ -14,14 +13,18 @@ class CheckOutUserService {
             const [isSubscribed, atividade, checkInValidated] = await Promise.all([
                 prismaClient.inscricao.findFirst({ where: { atividade_id, participante_id } }),
                 prismaClient.atividade.findUnique({ where: { id: atividade_id }, select: { horario: true } }),
-                prismaClient.checkIn.findUnique({ where: { id: atividade_id, participante_id: participante_id }, select: { checkInValidated: true } }),
-
+                prismaClient.checkIn.findFirst({
+                    where: { atividade_id, participante_id },
+                    select: { checkInValidated: true },
+                })
             ]);
 
             if (!isSubscribed) {
                 throw new AppError("O participante não está inscrito nesta atividade.", 400);
             }
-            if (!checkInValidated) {
+
+            // Verificar se o check-in foi realizado
+            if (!checkInValidated || checkInValidated.checkInValidated !== true) {
                 throw new AppError("Por favor realize o check-in primeiro.", 400);
             }
 
@@ -30,59 +33,35 @@ class CheckOutUserService {
             }
 
             if (distance > 0.8) {
-                throw new AppError("A distância do participante é maior que a permitida para realizar o check-in.", 400);
+                throw new AppError("A distância do participante é maior que a permitida para realizar o check-out.", 400);
             }
 
-            const alreadyRegistered = await prismaClient.checkOut.findFirst({
-                where: { atividade_id, participante_id },
-            });
-
-            if (alreadyRegistered) {
-                throw new AppError("O participante já realizou o check-Out nesta atividade.", 400);
-            }
-
-
+            // Comparação de horário ajustada
+            const agora = new Date();
+            const horaAtual = agora.getUTCHours();
+            const minutoAtual = agora.getUTCMinutes();
             const horarioAtividade = atividade.horario;
             const horaAtividade = horarioAtividade.getUTCHours();
             const minutoAtividade = horarioAtividade.getUTCMinutes();
 
-
-            const agora = new Date();
-            const horaAtual = agora.getUTCHours() - 3;
-            const minutoAtual = agora.getUTCMinutes();
-
-
-
-
-            if (horaAtual > horaAtividade || (horaAtual === horaAtividade && minutoAtual > minutoAtividade)) {
-                throw new AppError("O horário da atividade já expirou.", 400);
-
-
-            }
-
-            const checkIn = await prismaClient.checkOut.create({
+            const checkOut = await prismaClient.checkOut.create({
                 data: {
-
                     participante_id: participante_id,
                     inscricao_id: isSubscribed.id,
                     atividade_id: atividade_id,
                     checkOutTime: agora,
                     checkOutValidated: true,
-
                 }
-            }
+            });
 
-            );
-
-            return checkIn;
+            return checkOut;
         } catch (error) {
             if (error instanceof AppError) {
                 throw error;
             }
 
-
             console.error("Erro no Check-Out:", { participante_id, atividade_id, error });
-            throw new AppError("Houve um problema ao realizar o check-Out. Por favor, tente novamente mais tarde.", 500);
+            throw new AppError("Houve um problema ao realizar o check-out. Por favor, tente novamente mais tarde.", 500);
         }
     }
 }

@@ -1,3 +1,4 @@
+import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
 interface CreateEventoRequest {
@@ -48,7 +49,7 @@ class CreateEventoService {
 
 
 
-                return { message: "evento criado com sucesso" };
+                return evento;
             }else{
                 throw new Error("Este usuário não tem permissao para criar um evento");
             }
@@ -56,7 +57,7 @@ class CreateEventoService {
 
         } catch (error) {
             console.error(error)
-             throw new Error(`Não foi possível cadastrar Evento devido ao erro: ${error.message}`);
+             throw new AppError("Erro ao criar o evento", 500);
         }
     }
 }

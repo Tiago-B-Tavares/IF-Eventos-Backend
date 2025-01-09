@@ -16,12 +16,12 @@ class GetEventStatisticsService {
 
             // Conta as atividades agrupadas por tipo, filtrando pelo eventoId
             const activityTypesDistribution = await prismaClient.atividade.groupBy({
-                by: ["tipo"], // Agrupar pelo campo "tipo"
+                by: ["tipo"], 
                 where: {
-                    evento_id: eventoId, // Filtro para atividades do evento específico
+                    evento_id: eventoId, 
                 },
                 _count: {
-                    _all: true, // Contar o total de atividades em cada tipo
+                    _all: true, 
                 },
             });
 

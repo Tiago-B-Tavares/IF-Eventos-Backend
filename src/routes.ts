@@ -73,8 +73,8 @@ router.put('/user', new UpdateWebUserController().handle);
 // App User
 router.get('/app/user', new GetAppUsersController().handle);
 router.post('/app/user', new CreateAppUserController().handle);
-router.post('/app/user/checkin',logRequestData, new CheckinUserController().handle);
-router.post('/app/user/checkOut',logRequestData, new CheckOutUserController().handle);
+router.post('/app/user/checkin', new CheckinUserController().handle);
+router.post('/app/user/checkOut', new CheckOutUserController().handle);
 router.put('/app/user', new UpdateAppUserController().handle);
 
 

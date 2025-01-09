@@ -31,6 +31,7 @@ class ShowInscritosByAtividadeController {
             };
         });
 
+
         return res.json(novosInscritos);
     }
 }

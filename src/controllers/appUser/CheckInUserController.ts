@@ -5,6 +5,7 @@ import { AppError } from '../../ErrorControl/AppError';
 class CheckinUserController {
     async handle(req: Request, res: Response) {
         const { userId, atividade_id, distance } = req.body;
+console.log("controller: ", userId, atividade_id, distance);
 
 
         try {

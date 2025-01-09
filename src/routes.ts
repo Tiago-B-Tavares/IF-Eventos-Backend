@@ -105,6 +105,6 @@ router.get('/inscricoes', new ShowInscritosByAtividadeController().handle);
 router.get('/myInscriptions', new ShowInscritosByAtividadeController().handle);
 
 
-router.use('/files', express.static(path.join(__dirname, '..', 'public/uploads')));  
+
 
 export { router };

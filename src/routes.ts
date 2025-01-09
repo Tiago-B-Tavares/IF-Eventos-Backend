@@ -105,6 +105,7 @@ router.get('/inscricoes', new ShowInscritosByAtividadeController().handle);
 router.get('/myInscriptions', new ShowInscritosByAtividadeController().handle);
 
 
+router.get('/favicon.ico', (req, res) => res.status(204));  // Retorna "No Content" para requisições de favicon
 
 
 export { router };

@@ -1,5 +1,4 @@
 import express, { Router } from 'express';
-import multer from 'multer';
 import path from 'path';  
 
 import { CreateWebUserController } from './controllers/webUser/CreateWebUserController';

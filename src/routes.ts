@@ -45,9 +45,8 @@ import { ShowInscritosByAtividadeController } from './controllers/inscricoes/Sho
 import { ChangeUserPermissionsController } from './controllers/admin/ChangeUserPermissionsController';
 
 
-import uploadConfig from './config/multer';
 
-import { logRequestData } from './middlewares/logRequestData';
+
 import { CheckOutUserController } from './controllers/appUser/CheckOutUserController';
 
 
@@ -55,7 +54,7 @@ import { CheckOutUserController } from './controllers/appUser/CheckOutUserContro
 const router = Router();
 
 
-const upload = multer(uploadConfig.upload('./tmp'));
+
 
 
 router.put('/permissions', new ChangeUserPermissionsController().handle);

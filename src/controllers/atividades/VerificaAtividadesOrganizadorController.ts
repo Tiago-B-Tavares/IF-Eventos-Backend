@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { VerificaAtividadesOrganizadorService } from "../../services/atividades/VerificaAtividadesORganizadorService";
+import { VerificaAtividadesOrganizadorService } from "../../services/atividades/VerificaAtividadesOrganizadorService";
 
 
 

@@ -8,7 +8,7 @@ class ShowInscriptionsOfParticipantController {
 
         const showInscritosService = new ShowInscriptionsOfParticipantService();
         
-        const showInscritos = await showInscritosService.execute({atividade_id})
+        const showInscritos = await showInscritosService.execute({id:atividade_id})
 
         return res.json(showInscritos);
     }

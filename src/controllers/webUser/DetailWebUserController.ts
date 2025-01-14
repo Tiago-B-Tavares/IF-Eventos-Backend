@@ -1,18 +1,23 @@
-import {Request, Response} from 'express'
-import { DetailWebUSerService } from '../../services/webUser/DetailWebUserService'
+import { Request, Response } from 'express'
+import { GetUserProfileService } from '../../services/webUser/GetUserProfileService'
 
-class DetailWebUserController{
-    async  handle(req: Request, res: Response) {
+class GetUserProfileController {
+    async handle(req: Request, res: Response) {
+   
 
-        const user_id = req.user_id;
+            const id = req.query.id as string;
 
-        const detailWebUserService =  new DetailWebUSerService()
+            if (!id) {
+                return res.status(401).json({ error: 'Unauthorized' });
+            }
 
-        const user = await detailWebUserService.execute(user_id)
+            const detailWebUserService = new GetUserProfileService()
 
-        return res.json(user);
-        
+            const user = await detailWebUserService.execute(id)
+
+            return res.json(user);
+
     }
 }
 
-export { DetailWebUserController }
+export { GetUserProfileController }

@@ -4,12 +4,12 @@ import { compare } from "bcryptjs";
 
 interface AuthRequest {
   email: string;
-  senha: string;
+  password: string;
 }
 
-class AuthWebUserService {
-  async execute({ email, senha }: AuthRequest) {
-    console.log(email, senha);
+class AuthenticateUserService {
+  async execute({ email, password }: AuthRequest) {
+   
     
     try {
       const user = await prismaClient.organizador.findFirst({
@@ -22,7 +22,7 @@ class AuthWebUserService {
         throw new AppError("Email ou senha incorretos!", 401);
       }
 
-      const senhaMatch = await compare(senha, user.senha);
+      const senhaMatch = await compare(password, user.senha);
 
       if (!senhaMatch) {
         throw new AppError("Email ou senha incorretos!", 401);
@@ -39,4 +39,4 @@ class AuthWebUserService {
   }
 }
 
-export { AuthWebUserService };
+export { AuthenticateUserService };

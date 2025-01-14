@@ -1,16 +1,17 @@
 import { Request, Response } from 'express';
-import { CreateWebUserService } from '../../services/webUser/CreateWebUserService';
-import { Role } from '../../enums/permissionRoles'
+import { CreateUserService } from '../../services/webUser/CreateUserService';
 
-class CreateWebUserController {
+
+class CreateUserController {
   async handle(req: Request, res: Response) {
+
     const { nome, email, senha, googleId } = req.body;
     
-
     try {
-      const createWebUserService = new CreateWebUserService();
 
-      const user = await createWebUserService.execute({
+      const createUserService = new CreateUserService();
+
+      const user = await createUserService.execute({
         nome,
         email,
         senha,
@@ -18,6 +19,7 @@ class CreateWebUserController {
       });
 
       return res.json(user);
+
     } catch (error) {
       console.error('Erro ao criar usuário:', error);
       return res.status(500).json({ error: 'Erro ao criar usuário' });
@@ -25,4 +27,4 @@ class CreateWebUserController {
   }
 }
 
-export { CreateWebUserController };
+export { CreateUserController };

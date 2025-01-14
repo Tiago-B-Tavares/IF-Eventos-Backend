@@ -65,6 +65,7 @@ class ListAllEventosService {
                 }
             });
 
+
             return listEventos;
         } catch (error) {
           throw new  AppError(`Não foi possível listar os Eventos devido ao erro:`, error )

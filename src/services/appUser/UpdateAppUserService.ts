@@ -1,36 +1,43 @@
+import App from "next/app";
 import prismaClient from "../../prisma";
 import { hash } from 'bcryptjs';
+import { AppError } from "../../ErrorControl/AppError";
+import { throws } from "assert";
 
-interface updateAppUserRequest{ 
-    nome:string;
+interface updateAppUserRequest {
+    id: string;
+    nome: string;
     email: string;
-    senha?: string;
-    sexo?: string;
-    idade?:number;
+  
 }
 
-class UpdateAppUserService{
-    async  execute({id, nome, email, senha, sexo, idade }){
-
-        const senhaHash = await hash(senha, 8)
+class UpdateAppUserService {
+    async execute({ id, nome, email}:updateAppUserRequest) {
+        
+        
         try {
-            const alterUser = prismaClient.participante.update({
-                where:{
-                    id:id
+
+            if (!id) {
+                new AppError("Nao foi possivel alterar o usuario", 500)
+            }
+
+            const alteredUser = await prismaClient.participante.update({
+                where: {
+                    id: id
                 },
-                data:{
+                data: {
                     nome: nome,
-                    email:email,
-                    senha:senhaHash,
-                    sexo:sexo,
-                    idade:idade
+                    email: email,
+                 
                 }
             })
-            return alterUser
+           
+       
+            return alteredUser
         } catch (error) {
-            return { message: `Não foi possível alterar os dados usuário devido ao erro: \n ${error} ` }
+            return  new AppError("Nao foi possivel alterar o usuario devido ao erro: \n " + error + "", 500)
         }
-        
+
 
     }
 }

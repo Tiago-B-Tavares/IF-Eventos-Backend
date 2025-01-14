@@ -16,6 +16,6 @@ class ListAtividadesByEventIdController {
 
         res.json(atividades);
     }
-
+ 
 }
 export { ListAtividadesByEventIdController }

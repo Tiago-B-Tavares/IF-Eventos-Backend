@@ -26,15 +26,14 @@ class UserAlreadyExistsService {
           role: true
         },
       });
-
       if (user) {
         return { exists: true, id: user.id, googleId: user.googleId, role: user.role };
       } else {
-        return { exists: false }; 
+        return { exists: false };
       }
 
     } catch (error: any) {
-      throw new AppError("Erro ao buscar o usuário",  500);
+      throw new AppError("Erro ao buscar o usuário", 500);
     }
   }
 }

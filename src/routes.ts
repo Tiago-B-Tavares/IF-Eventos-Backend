@@ -1,11 +1,11 @@
 import express, { Router } from 'express';
-import path from 'path';  
+import path from 'path';
 
-import { CreateWebUserController } from './controllers/webUser/CreateWebUserController';
-import { AuthWebUserController } from './controllers/webUser/AuthWebUserController';
-import { DetailWebUserController } from './controllers/webUser/DetailWebUserController';
-import { UpdateWebUserController } from './controllers/webUser/UpdateWebuserController';
-import { GetAllUsersController } from './controllers/webUser/GetAllUsersController';
+import { CreateUserController } from './controllers/webUser/CreateUserController';
+import { AuthenticateUseController } from './controllers/webUser/AuthenticateUseController';
+import { GetUserProfileController } from './controllers/webUser/DetailWebUserController';
+import { UpdateUserController } from './controllers/webUser/UpdateUserController';
+import { GetUsersController } from './controllers/webUser/GetUsersController';
 import { UserAlreadyExistsController } from './controllers/webUser/UserAlreadyExistsController';
 import { GetUserDataByIdController } from './controllers/webUser/GetUserDataByIdController';
 
@@ -16,8 +16,6 @@ import { CheckinUserController } from './controllers/appUser/CheckInUserControll
 import { CreateEventoController } from './controllers/evento/CreateEventoController';
 import { UpdateEventoController } from './controllers/evento/UpdateEventoController';
 import { DeleteEventoController } from './controllers/evento/DeleteEventoController';
-import { CountEventosController } from './controllers/evento/CountEventoController';
-import { AddOrganizadorEventoController } from './controllers/evento/AddOrganizadorEventoController';
 import { ListEventoController } from './controllers/evento/ListEventoController';
 import { GetEventStatisticsController } from './controllers/evento/GetEventStatisticsController ';
 
@@ -59,13 +57,13 @@ const router = Router();
 router.put('/permissions', new ChangeUserPermissionsController().handle);
 
 // Web User
-router.post('/user', new CreateWebUserController().handle);
-router.post('/session', new AuthWebUserController().handle);
-router.get('/me', new DetailWebUserController().handle);
-router.get('/users', new GetAllUsersController().handle);
+router.post('/user', new CreateUserController().handle);
+router.post('/session', new AuthenticateUseController().handle);
+router.get('/me', new GetUserProfileController().handle);
+router.get('/users', new GetUsersController().handle);
 router.get('/user', new GetUserDataByIdController().handle);
 router.post('/check-email', new UserAlreadyExistsController().handler);
-router.put('/user', new UpdateWebUserController().handle);
+router.put('/user', new UpdateUserController().handle);
 
 
 // App User
@@ -77,19 +75,19 @@ router.put('/app/user', new UpdateAppUserController().handle);
 
 
 // Evento
-router.post('/eventos',new CreateEventoController().handle);
-router.get('/count-eventos', new CountEventosController().handle);
+router.post('/eventos', new CreateEventoController().handle);
 router.get('/eventos', new ListEventoController().handle);
 router.get('/todos-eventos', new ListAllEventosController().handle);
 router.get('/eventos/estatisticas', new GetEventStatisticsController().handle);
+router.put('/eventos', new UpdateEventoController().handle);
 router.delete('/evento', new DeleteEventoController().handle);
 
 
 // Atividades
 router.post('/atividades', new CreateAtividadeController().handle);
 router.delete('/atividades', new DeleteAtividadeController().handle);
-router.get('/evento/atividades', new ListAtividadesByEventIdController().handle); 
-router.get('/atividades', new ListAtividadesController().handle); 
+router.get('/evento/atividades', new ListAtividadesByEventIdController().handle);
+router.get('/atividades', new ListAtividadesController().handle);
 router.put('/atividades', new UpdateAtividadeController().handle);
 router.get('/hasAtividades', new VerificaAtividadesOrganizadorController().handle)
 
@@ -105,7 +103,7 @@ router.get('/inscricoes', new ShowInscritosByAtividadeController().handle);
 router.get('/myInscriptions', new ShowInscritosByAtividadeController().handle);
 
 
-router.get('/favicon.ico', (req, res) => res.status(204));  // Retorna "No Content" para requisições de favicon
+router.get('/favicon.ico', (req, res) => res.status(204));  
 
 
 export { router };

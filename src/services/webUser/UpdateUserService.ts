@@ -9,26 +9,30 @@ interface UpdateWebUserRequest {
     senha?: string;
     googleId?: string;
 }
-class UpdateWebUserService {
+class UpdateUserService {
     async execute({ id, nome, email, senha, googleId }: UpdateWebUserRequest) {
 
         try {
+
             const senhaHash = await hash(senha, 8)
-            await prismaClient.organizador.update({
+
+            const userUpdated = await prismaClient.organizador.update({
                 where: {
                     id: id,
                 },
                 data: {
+
                     nome: nome,
                     email: email,
-                    senha:senhaHash,
-                    googleId:googleId
+                    senha: senhaHash,
+                    googleId: googleId
                 }
             })
+            return userUpdated
         } catch (error) {
-            throw new AppError("Nao foi possivel atualizar o usuario", 500);
+            throw new AppError("Não foi possivel atualizar os dados", 500);
         }
     }
 }
 
-export { UpdateWebUserService }
+export { UpdateUserService }

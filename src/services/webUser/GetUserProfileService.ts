@@ -1,12 +1,12 @@
 import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
-class DetailWebUSerService {
-    async execute(user_id: string) {
+class GetUserProfileService {
+    async execute(id: string) {
         try {
             const user = await prismaClient.organizador.findFirst({
                 where: {
-                    id: user_id
+                    id: id
                 },
                 select: {
                     id: true,
@@ -22,4 +22,4 @@ class DetailWebUSerService {
     }
 }
 
-export { DetailWebUSerService }
+export { GetUserProfileService }

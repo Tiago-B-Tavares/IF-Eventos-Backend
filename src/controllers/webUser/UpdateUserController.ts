@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { UpdateWebUserService } from '../../services/webUser/UpdateWebUserService'
+import { UpdateUserService } from '../../services/webUser/UpdateUserService'
 
-class UpdateWebUserController{
+class UpdateUserController{
     async handle( req: Request, res: Response){
 
         const id  = req.query.id as string;
 
         const { nome, email, senha } = req.body;
         
-        const updateWebUserService = new UpdateWebUserService();
+        const updateUserService = new UpdateUserService();
 
-        const user = await updateWebUserService.execute({
+        const user = await updateUserService.execute({
                 id, 
                 nome, 
                 email, 
@@ -18,9 +18,9 @@ class UpdateWebUserController{
             });
         
         return res.json({
-            menssage: "Usuário alterado com sucesso!"
+           user
         });
 
     }
 }
-export { UpdateWebUserController }
+export { UpdateUserController }

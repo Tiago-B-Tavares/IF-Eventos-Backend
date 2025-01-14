@@ -4,38 +4,42 @@ import prismaClient from "../../prisma";
 
 interface UpdateEventoRequest {
     id: string;
-    nome:string;
-    descricao: string;
-    dataInicio: string;
-    dataFim: string;
-    horario: string;
+    nome: string;
+    dataInicio: Date;
+    dataFim: Date;
+    horario: Date;
     local: string;
+    banner?: string;
+    descricao: string;
 
 }
+
 class UpdateEventoService {
-    async execute({ id, nome, descricao, dataInicio, dataFim, horario, local }: UpdateEventoRequest) {
+    async execute({ id, nome, descricao, dataInicio, dataFim, horario, local, banner }: UpdateEventoRequest) {
         try {
-       
-            
-            const updadeEvento = await prismaClient.evento.update({
+
+           
+            const updatedEvento = await prismaClient.evento.update({
                 where: {
                     id: id
                 },
                 data: {
-                    nome:nome,
-                    descricao:descricao,
+                    nome: nome,
+                    descricao: descricao,
                     dataInicio: dataInicio,
                     dataFim: dataFim,
                     horario: horario,
                     local: local,
+                    banner: banner
                 }
             })
-            return { message: "alterado com susesso!" }
+            return updatedEvento
         } catch (error) {
-            throw new  AppError(`Não foi possível remover este evento`, error )
-        
+           
+            throw new AppError(`Não foi possível remover este evento`, error)
+
         }
-        
+
     }
 }
 export { UpdateEventoService }

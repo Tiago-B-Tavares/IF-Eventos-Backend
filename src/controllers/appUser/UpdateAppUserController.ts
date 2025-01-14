@@ -1,23 +1,21 @@
-import { Response, Request, query, json } from "express";
+import { Response, Request} from "express";
 import { UpdateAppUserService } from "../../services/appUser/UpdateAppUserService";
 
 class UpdateAppUserController {
     async handle(req: Request, res: Response) {
         const id = req.query.id as string
-        const { nome, email, senha, sexo, idade } = req.body;
+        const { nome, email } = req.body;
 
         const updateAppUserService = new UpdateAppUserService();
 
-        const user = await updateAppUserService.execute({
+        const alterUser = await updateAppUserService.execute({
             id,
             nome,
             email,
-            senha,
-            sexo,
-            idade
+            
         })
 
-        return res.json(user);
+        return res.json(alterUser);
 
     }
 }

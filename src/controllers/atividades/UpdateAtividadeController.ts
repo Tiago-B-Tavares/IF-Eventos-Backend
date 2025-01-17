@@ -5,9 +5,9 @@ class UpdateAtividadeController {
     async handle(req: Request, res: Response) {
         const id = req.query.id as string;
         let { nome, descricao, local, horario, vagas, ch, tipo, concomitante } = req.body;
-        if (tipo !== $Enums.TipoAtividade) {
-            tipo = $Enums.TipoAtividade.Oficina;
-        }
+     
+        
+      
 
         const horarioFormatado = new Date();
         horarioFormatado.setHours(Number(horario.slice(0, 2)) - 3);

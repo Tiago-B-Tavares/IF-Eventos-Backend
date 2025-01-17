@@ -2,7 +2,7 @@ import { AppError } from '../../ErrorControl/AppError';
 import prismaClient from '../../prisma';
 import { v2 as cloudinary } from 'cloudinary';
 import QRCode from 'qrcode';
-import { $Enums } from '@prisma/client';
+
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
@@ -16,10 +16,10 @@ interface AtividadeRequest {
     local: string;
     horario: Date;
     vagas: number;
-    tipo: $Enums.TipoAtividade;
+    tipo: string   ;
     ch: number;
     data: string;
-    concomitante: boolean;
+    concomitante: boolean; 
     evento_id: string;
     organizador_id: string;
 }

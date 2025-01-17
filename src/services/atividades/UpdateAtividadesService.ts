@@ -6,7 +6,7 @@ interface UpdateAtividadeRequest {
     local: string;
     horario: Date;
     ch: number;
-    tipo: $Enums.TipoAtividade
+    tipo:string;
     concomitante: boolean;
     nome: string;
     descricao: string;
@@ -37,6 +37,7 @@ class UpdateAtividadesService {
             });
 
 
+console.log(atividade);
 
             return { message: "Atividade atualizada com sucesso!", atividade };
 

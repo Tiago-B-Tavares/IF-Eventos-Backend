@@ -18,13 +18,25 @@ class CreateAtividadeController {
                 concomitante,
                 organizador_id
             } = req.body;
-            if (tipo !== $Enums.TipoAtividade) {
-                tipo = $Enums.TipoAtividade.Oficina;
-            }
+
 
 
             const evento_id = req.query.id as string;
 
+
+            const tiposPermitidos = [
+                "Oficina",
+                "Palestra",
+                "Workshop",
+                "Minicurso",
+                "Seminario",
+                "Mesa Redonda",
+                "Roda de Conversa",
+                "Hackathon",
+            ];
+            if (!tiposPermitidos.includes(tipo)) {
+                throw new Error("Tipo de atividade inválido");
+            }
             const createAtividadeService = new CreateAtividadeService();
             let activityTime: Date | undefined;
             if (horario) {
@@ -35,6 +47,7 @@ class CreateAtividadeController {
             }
 
 
+console.log("horario: ", activityTime);
 
 
             const atividade = await createAtividadeService.execute({
@@ -44,7 +57,7 @@ class CreateAtividadeController {
                 horario: activityTime,
                 vagas: Number(vagas),
                 ch: Number(ch),
-                tipo: tipo as $Enums.TipoAtividade,
+                tipo: tipo,
                 concomitante: !!concomitante,
                 data,
                 evento_id,

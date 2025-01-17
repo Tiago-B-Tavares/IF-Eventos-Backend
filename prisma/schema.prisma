@@ -52,7 +52,7 @@ model Atividade {
   data          String
   qr_code_link  String                 @default("")
   ch            Int
-  tipo          TipoAtividade
+  tipo          String
   concomitante  Boolean
   evento_id     String
   evento        Evento                 @relation(fields: [evento_id], references: [id])

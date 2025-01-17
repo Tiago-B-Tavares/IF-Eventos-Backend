@@ -26,7 +26,6 @@ class CreateEventoService {
     async execute({ nome, descricao, dataInicio, dataFim, horario, local, banner, organizador_id }: CreateEventoRequest) {
         try {
 
-           
             const resultFile: UploadApiResponse = await new Promise((resolve, reject) => {
                 cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
                     if (error) {
@@ -44,7 +43,13 @@ class CreateEventoService {
                 select: {
                     role: true
                 }
-            })
+            });
+
+            // Verificação para garantir que o organizador foi encontrado
+            if (!userRole) {
+                throw new AppError("Organizador não encontrado", 404);
+            }
+
             if (userRole.role === 'SUPER_ADMIN') {
                 const evento = await prismaClient.evento.create({
                     data: {
@@ -58,7 +63,6 @@ class CreateEventoService {
                     },
                 });
 
-
                 await prismaClient.eventoOrganizador.create({
                     data: {
                         evento_id: evento.id,
@@ -69,14 +73,16 @@ class CreateEventoService {
                 return evento;
 
             } else {
-                throw new AppError("Este usuário não tem permissao para criar um evento", 400);
+                throw new AppError("Este usuário não tem permissão para criar um evento", 400);
             }
 
         } catch (error) {
-            console.error(error)
+            console.error(error);
             throw new AppError("Erro ao criar o evento", 500);
         }
     }
 }
+
+
 
 export { CreateEventoService };

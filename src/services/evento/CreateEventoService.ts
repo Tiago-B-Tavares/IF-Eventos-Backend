@@ -24,7 +24,8 @@ interface CreateEventoRequest {
 class CreateEventoService {
 
     async execute({ nome, descricao, dataInicio, dataFim, horario, local, banner, organizador_id }: CreateEventoRequest) {
-        console.log("service: ", nome, descricao, dataInicio, dataFim, horario, local, banner, organizador_id);
+        const dataInicioFormatted = new Date(dataInicio + 'T00:00:00.000Z');
+        const dataFimFormatted = new Date(dataFim + 'T00:00:00.000Z');
         
         try {
 
@@ -52,8 +53,8 @@ class CreateEventoService {
                     data: {
                         nome,
                         descricao,
-                        dataInicio,
-                        dataFim,
+                        dataInicio: dataInicioFormatted,
+                        dataFim: dataFimFormatted,
                         horario,
                         local,
                         banner: resultFile.secure_url,

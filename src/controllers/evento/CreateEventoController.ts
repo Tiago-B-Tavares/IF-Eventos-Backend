@@ -7,7 +7,7 @@ class CreateEventoController {
     async handle(req: Request, res: Response) {
 
         const { nome, descricao, dataInicio, dataFim, horario, local, organizador_id } = req.body;
-        //  console.log("controller: ", nome, descricao, dataInicio, dataFim, horario, local, organizador_id);
+        
 
         function formataHorario(horario: string) {
 
@@ -29,8 +29,7 @@ class CreateEventoController {
 
         const file: UploadedFile = req.files['file'] as UploadedFile;
 
-        const dataInicioFormatted = new Date(dataInicio + 'T00:00:00.000Z');
-        const dataFimFormatted = new Date(dataFim + 'T00:00:00.000Z');
+       
 
         try {
 
@@ -40,8 +39,8 @@ class CreateEventoController {
             const evento = await createEventoService.execute({
                 nome,
                 descricao,
-                dataInicio: dataInicioFormatted,
-                dataFim: dataFimFormatted,
+                dataInicio: dataInicio,
+                dataFim: dataFim,
                 horario: formataHorario(horario),
                 banner: file,
                 local,

@@ -1,4 +1,6 @@
-import prismaClient from "../../prisma";
+import { AppError } from "../../../ErrorControl/AppError";
+import prismaClient from "../../../prisma";
+
 
 interface CreateColaboradorRequest {
     organizador_id: string;
@@ -8,7 +10,7 @@ interface CreateColaboradorRequest {
 class CreateColaboradorEventoService {
     async execute({ organizador_id, evento_id }: CreateColaboradorRequest) {
 
-        
+
         try {
             // Verifica se o organizador existe
             const organizador = await prismaClient.organizador.findFirst({
@@ -25,12 +27,12 @@ class CreateColaboradorEventoService {
 
             // Caso o organizador não exista
             if (!organizador) {
-                return { message: "Não existe um organizador cadastrado com esse ID." };
+                new AppError("Oraganizador não encontrado", 404);
             }
 
             // Caso o organizador já esteja vinculado ao evento
             if (organizadorEventoAlreadyExists) {
-                return { message: "Este organizador já é responsável por este evento!" };
+                new AppError("Este organizador já é responsável por este evento!", 400);
             }
 
             // Cria a relação entre o organizador e o evento
@@ -40,9 +42,16 @@ class CreateColaboradorEventoService {
                     organizador_id: organizador_id
                 }
             });
-
+            if (organizador.role !== "SUPER_ADMIN") {
+                const alterRoleColaborador = await prismaClient.organizador.update({
+                    where: { id: organizador_id },
+                    data: {
+                        role: "SUPER_ADMIN"
+                    }
+                });
+            }
             // Retorna o resultado
-            return { message: "Colaborador adicionado com sucesso!", colaborador };
+            return colaborador;
 
         } catch (error) {
             // Retorna erro

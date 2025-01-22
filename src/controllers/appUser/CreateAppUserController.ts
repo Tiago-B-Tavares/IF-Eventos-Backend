@@ -4,6 +4,7 @@ import { CreateAppUserService } from '../../services/appUser/CreateAppUserServic
 class CreateAppUserController {
     async handle(req: Request, res: Response) {
         const { data } = req.body; // Acessando o campo "data" diretamente
+console.log(data);
 
         if (!data || !data.email_addresses || !Array.isArray(data.email_addresses)) {
             return res.status(400).json({ message: "Estrutura de dados inválida ou dados ausentes." });
@@ -20,7 +21,7 @@ class CreateAppUserController {
         const name = `${firstName} ${lastName}`;
 
 
-        // Aqui você pode adicionar a lógica para salvar os dados
+ 
         const createAppUserService = new CreateAppUserService();
         const user = await createAppUserService.execute({
             id: id,

@@ -29,9 +29,8 @@ import { ListAtividadesController } from './controllers/atividades/ListAtividade
 import { UpdateAtividadeController } from './controllers/atividades/UpdateAtividadeController';
 import { VerificaAtividadesOrganizadorController } from './controllers/atividades/VerificaAtividadesOrganizadorController';
 
-import { UpdateColaboradorController } from './controllers/colaboradores/UpdateColaboradorController';
-import { CreateColaboradorAtividadeController } from './controllers/colaboradores/CreateColaboradorAtividadeController';
-import { CreateColaboradorEventoController } from './controllers/colaboradores/CreateColaboradorEventoController';
+import { GetColaboradoresEventoController } from './controllers/responsaveis/eventos/GetColaboradorEventoController';
+import { CreateColaboradorEventoController } from './controllers/responsaveis/eventos/CreateColaboradorEventoController';
 
 import { CreateInscricoesController } from './controllers/inscricoes/CreateInscricoesController';
 import { RemoveInscricaoController } from './controllers/inscricoes/RemoveInscricaoController';
@@ -45,6 +44,13 @@ import { ChangeUserPermissionsController } from './controllers/admin/ChangeUserP
 
 
 import { CheckOutUserController } from './controllers/appUser/CheckOutUserController';
+import { UserController } from './controllers/appUser/userController';
+import { CreateColaboradorAtividadeController } from './controllers/responsaveis/atividades/CreateColaboradorAtividadeController';
+import { DeleteColaboradorEventoController } from './controllers/responsaveis/eventos/DeleteColaboradorEventoController';
+import { DeleteColaboradorAtividadeController } from './controllers/responsaveis/atividades/DeleteColaboradorAtividadeController';
+import { GetColaboradoresAtividadeController } from './controllers/responsaveis/atividades/GetColaboradoresAtividadeController';
+
+
 
 
 
@@ -71,6 +77,8 @@ router.get('/app/user', new GetAppUsersController().handle);
 router.post('/app/user', new CreateAppUserController().handle);
 router.post('/app/user/checkin', new CheckinUserController().handle);
 router.post('/app/user/checkOut', new CheckOutUserController().handle);
+router.post('/app/user/create', new UserController().create);
+
 router.put('/app/user', new UpdateAppUserController().handle);
 
 
@@ -92,9 +100,18 @@ router.put('/atividades', new UpdateAtividadeController().handle);
 router.get('/hasAtividades', new VerificaAtividadesOrganizadorController().handle)
 
 // Colaboradores das atividades
-router.post('/colaborador', new CreateColaboradorAtividadeController().handle);
+router.post('/colaborador-atividade', new CreateColaboradorAtividadeController().handle);
+router.get('/colaborador-atividade', new GetColaboradoresAtividadeController().handle);
+router.delete('/colaborador-atividade', new DeleteColaboradorAtividadeController().handle);
+// router.delete('/colaborador-evento', new DeleteColaboradorAtividadeController().handle);
+
+// Colaboradores dos eventos
+router.delete('/colaborador-evento', new DeleteColaboradorEventoController().handle);
 router.post('/colaborador-evento', new CreateColaboradorEventoController().handle);
-router.put('/colaborador', new UpdateColaboradorController().handle);
+router.get('/colaborador-evento', new GetColaboradoresEventoController().handle);
+
+
+
 
 // Inscrições
 router.post('/inscrever', new CreateInscricoesController().handle);
@@ -103,7 +120,7 @@ router.get('/inscricoes', new ShowInscritosByAtividadeController().handle);
 router.get('/myInscriptions', new ShowInscritosByAtividadeController().handle);
 
 
-router.get('/favicon.ico', (req, res) => res.status(204));  
+router.get('/favicon.ico', (req, res) => res.status(204));
 
 
 export { router };

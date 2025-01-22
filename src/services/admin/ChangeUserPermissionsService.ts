@@ -20,7 +20,7 @@ class ChangeUserPermissionsService {
             })
       
             
-            return "Permissoes atualizadas!"
+          return  changeRole
         } catch (error) {
             return "erro ao atualizar permissões"
         }

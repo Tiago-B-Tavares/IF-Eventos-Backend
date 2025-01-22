@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { CreateColaboradorEventoService } from "../../services/colaboradores/CreateColaboradorEventoService";
+import { CreateColaboradorEventoService } from "../../../services/responsaveis/eventos/CreateColaboradorEventoService";
+
 
 
 class CreateColaboradorEventoController {
@@ -8,13 +9,10 @@ class CreateColaboradorEventoController {
 
         const service = new CreateColaboradorEventoService();
         const result = await service.execute({ organizador_id, evento_id });
-console.log(result);
 
-        if (result.error) {
-            return res.status(400).json({ message: result.message });
-        }
+       
 
-        return res.status(200).json({ message: result.message });
+        return res.json(result);
     }
 }
 

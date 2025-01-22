@@ -64,8 +64,11 @@ class ListAllEventosService {
 
                 }
             });
+// const listEventos2 = listEventos.map(evento => ({
+//    ...evento,
+//    horario:evento.horario = 
 
-
+// }))
             return listEventos;
         } catch (error) {
           throw new  AppError(`Não foi possível listar os Eventos devido ao erro:`, error )

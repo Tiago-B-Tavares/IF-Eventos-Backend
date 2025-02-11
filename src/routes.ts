@@ -49,6 +49,9 @@ import { CreateColaboradorAtividadeController } from './controllers/responsaveis
 import { DeleteColaboradorEventoController } from './controllers/responsaveis/eventos/DeleteColaboradorEventoController';
 import { DeleteColaboradorAtividadeController } from './controllers/responsaveis/atividades/DeleteColaboradorAtividadeController';
 import { GetColaboradoresAtividadeController } from './controllers/responsaveis/atividades/GetColaboradoresAtividadeController';
+import { GetAnalisisAtividadeController } from './controllers/evento/getAnalisisAtividadeController';
+import { GetRelatorioEventoController } from './controllers/evento/GetRelatorioEventoController';
+import { GetCheckinPorAtividadeController } from './controllers/evento/GetCheckinPorAtividadeController';
 
 
 
@@ -86,7 +89,12 @@ router.put('/app/user', new UpdateAppUserController().handle);
 router.post('/eventos', new CreateEventoController().handle);
 router.get('/eventos', new ListEventoController().handle);
 router.get('/todos-eventos', new ListAllEventosController().handle);
-router.get('/eventos/estatisticas', new GetEventStatisticsController().handle);
+router.get('/eventos/analise/tipo-atividade', new GetEventStatisticsController().handle);
+router.get('/evento/analise/atividades', new GetAnalisisAtividadeController().handle);
+// router.get('/evento/analise/atividades', new GetAnalisisAtividadeController().handle);
+router.get('/evento/analise/checkin-atividade', new GetCheckinPorAtividadeController().handle);
+router.get('/evento/analise/evento', new GetRelatorioEventoController().handle);
+
 router.put('/eventos', new UpdateEventoController().handle);
 router.delete('/evento', new DeleteEventoController().handle);
 

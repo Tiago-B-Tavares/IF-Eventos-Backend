@@ -43,7 +43,7 @@ class CreateColaboradorAtividadeService {
                     organizador_id: organizador_id
                 }
             });
-            
+             
             return colaborador;
 
         } catch (error) {

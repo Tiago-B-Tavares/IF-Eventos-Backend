@@ -20,6 +20,7 @@ class ListAtividadesByEventIdService {
           descricao: true,
           concomitante: true,
           vagas: true,
+          tipo: true,
           ch: true,
           organizadores: {
             select: {

@@ -35,15 +35,24 @@ class CheckInUserService {
             const horaAtividade = horarioAtividade.getUTCHours();
             const minutoAtividade = horarioAtividade.getUTCMinutes();
 
-            // Verifica se o participante está inscrito em outra atividade no mesmo horário e que seja concomitante
-            const conflito = atividadesInscritas.some(e => 
-                e.atividade.concomitante && 
-                e.atividade.horario.getUTCHours() === horaAtividade &&
-                e.atividade.horario.getUTCMinutes() === minutoAtividade
-            );
+            // Verifica se o participante está inscrito em outra atividade no mesmo horário
+            // e se pelo menos uma delas não é concomitante
+            const conflito = atividadesInscritas.some(e => {
+                const horaOutraAtividade = e.atividade.horario.getUTCHours();
+                const minutoOutraAtividade = e.atividade.horario.getUTCMinutes();
+
+                // Primeiro verifica se os horários são iguais
+                const mesmoHorario = horaOutraAtividade === horaAtividade && minutoOutraAtividade === minutoAtividade;
+
+                // Se os horários forem iguais, verifica concomitância
+                return mesmoHorario && (!atividade.concomitante || !e.atividade.concomitante);
+            });
 
             if (conflito) {
-                throw new AppError("Você já está inscrito em uma atividade no mesmo horário. Por favor, cancele uma das inscrições.", 400);
+                throw new AppError(
+                    "Você já está inscrito em uma atividade no mesmo horário que não é concomitante. Cancele a outra inscrição antes de fazer o check-in.",
+                    400
+                );
             }
 
             const agora = new Date();

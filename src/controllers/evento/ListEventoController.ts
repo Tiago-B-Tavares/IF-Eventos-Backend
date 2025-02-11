@@ -3,6 +3,8 @@ import { ListEventoService } from "../../services/evento/ListEventoService";
 
 class ListEventoController {
     async handle(req:Request, res:Response){
+        console.log("chegou: ", req.query.id);
+        
         const id = req.query.id as string 
         const eventoList = new ListEventoService();
         const eventos = await eventoList.execute({id})

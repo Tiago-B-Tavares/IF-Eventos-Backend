@@ -18,6 +18,8 @@ class CreateInscricoesController {
         } catch (error) {
             console.error("Erro ao criar inscrição:", error.message);
 
+            console.log(JSON.stringify(error));
+
             return res.status(400).json({
                 error: "Erro ao criar inscrição.",
                 message: error.message,

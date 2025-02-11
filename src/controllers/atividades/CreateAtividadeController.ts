@@ -47,7 +47,7 @@ class CreateAtividadeController {
             }
 
 
-console.log("horario: ", activityTime);
+
 
 
             const atividade = await createAtividadeService.execute({
@@ -59,7 +59,7 @@ console.log("horario: ", activityTime);
                 ch: Number(ch),
                 tipo: tipo,
                 concomitante: !!concomitante,
-                data,
+                data:new Date(data),
                 evento_id,
                 organizador_id,
 

@@ -22,10 +22,11 @@ interface CreateEventoRequest {
 }
 
 class CreateEventoService {
-
+    
     async execute({ nome, descricao, dataInicio, dataFim, horario, local, banner, organizador_id }: CreateEventoRequest) {
         const dataInicioFormatted = new Date(dataInicio + 'T00:00:00.000Z');
         const dataFimFormatted = new Date(dataFim + 'T00:00:00.000Z');
+        console.log("service: ",dataInicioFormatted, dataFimFormatted);
         
         try {
 

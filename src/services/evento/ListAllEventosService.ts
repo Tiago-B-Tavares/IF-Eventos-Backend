@@ -1,13 +1,74 @@
-
 import { AppError } from "../../ErrorControl/AppError";
 import prismaClient from "../../prisma";
 
+// Tipos auxiliares para melhorar a legibilidade
+type EventoWithRelations = {
+    id: string;
+    nome: string;
+    descricao: string | null;
+    horario: string | null;
+    dataInicio: Date | null;
+    dataFim: Date | null;
+    local: string | null;
+    banner: string | null;
+    organizadores: Array<{ organizador: { nome: string } }>;
+    atividades: Array<{
+        id: string;
+        nome: string;
+        local: string | null;
+        horario: string | null;
+        concomitante: boolean;
+        descricao: string | null;
+        vagas: number | null;
+        tipo: string | null;
+        data: Date | null;
+        ch: number | null;
+        qr_code_link: string | null;
+        inscricoes: Array<{ participante: { nome: string; email: string } }>;
+        organizadores: Array<{ organizador: { nome: string } }>;
+    }>;
+};
 
 class ListAllEventosService {
-    async execute() {
+    async execute(): Promise<EventoWithRelations[]> {
         try {
-            const listEventos = await prismaClient.evento.findMany({
+            // Fragmento para organizar a seleção de atividades
+             console.time('ListAllEventosService')
+            const atividadeSelect = {
+                id: true,
+                nome: true,
+                local: true,
+                horario: true,
+                concomitante: true,
+                descricao: true,
+                vagas: true,
+                tipo: true,
+                data: true,
+                ch: true,
+                qr_code_link: true,
+                inscricoes: {
+                    select: {
+                        participante: {
+                            select: {
+                                nome: true,
+                                email: true,
+                            },
+                        },
+                    },
+                },
+                organizadores: {
+                    select: {
+                        organizador: {
+                            select: {
+                                nome: true,
+                            },
+                        },
+                    },
+                },
+            };
 
+         
+            const eventos = await prismaClient.evento.findMany({
                 select: {
                     id: true,
                     nome: true,
@@ -17,61 +78,29 @@ class ListAllEventosService {
                     dataFim: true,
                     local: true,
                     banner: true,
-                    _count: true,
                     organizadores: {
                         select: {
                             organizador: {
                                 select: {
-                                    nome: true
-                                }
-                            }
-                        }
+                                    nome: true,
+                                },
+                            },
+                        },
                     },
                     atividades: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            local: true,
-                            horario: true,
-                            concomitante: true,
-                            descricao: true,
-                            vagas: true,
-                            tipo: true,
-                            ch: true,
-                            qr_code_link: true,
-                            inscricoes: {
-                                select: {
-                                    participante: {
-                                        select: {
-                                            nome: true,
-                                            email: true,
-                                         
-                                        }
-                                    }
-                                }
-                            },                        
-                            organizadores: {
-                                select: {
-                                    organizador: {
-                                        select: {
-                                            nome: true,
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                    }
-
-                }
+                        select: atividadeSelect, // Reutilização do fragmento
+                    },
+                },
             });
-// const listEventos2 = listEventos.map(evento => ({
-//    ...evento,
-//    horario:evento.horario = 
+            console.timeEnd('ListAllEventosService')
 
-// }))
-            return listEventos;
+            return eventos as unknown as EventoWithRelations[];
         } catch (error) {
-          throw new  AppError(`Não foi possível listar os Eventos devido ao erro:`, error )
+            const errorMessage = error instanceof Error 
+                ? error.message 
+                : "Erro desconhecido ao listar eventos";
+            
+            throw new AppError(`Não foi possível listar os eventos: ${errorMessage}`, 500);
         }
     }
 }

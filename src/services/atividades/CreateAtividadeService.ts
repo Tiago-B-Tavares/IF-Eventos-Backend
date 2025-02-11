@@ -18,7 +18,7 @@ interface AtividadeRequest {
     vagas: number;
     tipo: string   ;
     ch: number;
-    data: string;
+    data: Date;
     concomitante: boolean; 
     evento_id: string;
     organizador_id: string;

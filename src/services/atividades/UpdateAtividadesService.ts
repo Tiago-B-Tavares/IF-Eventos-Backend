@@ -5,6 +5,7 @@ interface UpdateAtividadeRequest {
     id: string;
     local: string;
     horario: Date;
+    data: Date;
     ch: number;
     tipo:string;
     concomitante: boolean;
@@ -14,7 +15,7 @@ interface UpdateAtividadeRequest {
 }
 
 class UpdateAtividadesService {
-    async execute({ id, local, horario, ch, tipo, concomitante, nome, descricao, vagas }: UpdateAtividadeRequest) {
+    async execute({ id, local, horario, ch, data, tipo, concomitante, nome, descricao, vagas }: UpdateAtividadeRequest) {
 
 
       
@@ -27,6 +28,7 @@ class UpdateAtividadesService {
                 data: {
                     local,
                     horario,
+                    data,
                     ch,
                     tipo,
                     concomitante,
@@ -37,7 +39,7 @@ class UpdateAtividadesService {
             });
 
 
-console.log(atividade);
+            
 
             return { message: "Atividade atualizada com sucesso!", atividade };
 

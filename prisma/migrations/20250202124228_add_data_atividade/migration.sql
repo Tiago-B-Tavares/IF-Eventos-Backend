@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "atividades" ALTER COLUMN "data" SET DEFAULT CURRENT_TIMESTAMP;

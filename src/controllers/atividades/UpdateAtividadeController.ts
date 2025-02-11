@@ -4,7 +4,7 @@ import { $Enums } from '@prisma/client';
 class UpdateAtividadeController {
     async handle(req: Request, res: Response) {
         const id = req.query.id as string;
-        let { nome, descricao, local, horario, vagas, ch, tipo, concomitante } = req.body;
+        let { nome, descricao, local,data, horario, vagas, ch, tipo, concomitante } = req.body;
      
         
       
@@ -19,7 +19,7 @@ class UpdateAtividadeController {
         try {
             Number(ch)
             const atividade = await updateAtividadesService.execute({
-                id, local, horario: horarioFormatado, ch, tipo, concomitante, nome, descricao, vagas
+                id, local, horario: horarioFormatado, data, ch, tipo, concomitante, nome, descricao, vagas
             });
 
 

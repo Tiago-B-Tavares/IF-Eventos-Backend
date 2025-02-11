@@ -28,7 +28,7 @@ class UpdateEventoController {
                 local,
                 banner
             })
-            console.log(evento);
+      
 
             return res.json(evento);
         } catch (error) {

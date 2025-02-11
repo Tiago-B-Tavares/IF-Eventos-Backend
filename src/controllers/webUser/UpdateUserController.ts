@@ -7,6 +7,7 @@ class UpdateUserController{
         const id  = req.query.id as string;
 
         const { nome, email, senha } = req.body;
+        console.log("controller ", id, nome, email, senha);
         
         const updateUserService = new UpdateUserService();
 
